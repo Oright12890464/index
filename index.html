@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 body{
-  font-family:"Microsoft JhengHei";
-  background:#f5f5f5;
   margin:0;
-  padding:20px;
+  font-family:"Microsoft JhengHei";
+  background:#f2f2f2;
 }
 
-/* ⭐ App卡片 */
-。container{
+/* ⭐ 手機App卡片 */
+.container{
   max-width:420px;
   margin:auto;
   background:white;
@@ -26,13 +25,12 @@ body{
 h2{
   text-align:center;
   font-size:22px;
-  margin-bottom:15px;
 }
 
-/* ⭐ 手機大輸入 */
+/* ⭐ 手機超大輸入 */
 input{
   width:100%;
-  padding:14px;
+  padding:16px;
   margin-top:10px;
   font-size:18px;
   border-radius:10px;
@@ -43,8 +41,8 @@ input{
 /* 按鈕 */
 button{
   width:100%;
-  margin-top:15px;
   padding:16px;
+  margin-top:15px;
   font-size:18px;
   background:#1976d2;
   color:white;
@@ -55,13 +53,12 @@ button{
 /* 訊息 */
 #msg{
   text-align:center;
-  margin-top:10px;
+  margin-top:12px;
   font-size:16px;
   color:#2e7d32;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -78,7 +75,8 @@ button{
 
 <input id="qty" type="number" placeholder="數量">
 <input id="sample" type="number" placeholder="取樣">
-<input id="box" placeholder="箱/版">
+
+<input id="box" placeholder="箱/板">
 
 <button onclick="send()">送出</button>
 
@@ -88,42 +86,44 @@ button{
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzxkGoc5xGXykxtaF9OXEcbDjQA3Vt392IlZG3x01lqCm31d4i93jUsIPqfMIo61oI2/exec";
+const API = "https://script.google.com/macros/s/AKfycbzxkGoc5xGXykxtaF9OXEcbDjQA3Vt392IlZG3x01lqCm31d4i93jUsIPqfMIo61oI2/exec";
 
 async function send(){
 
-  const form = new URLSearchParams();
+  console.log("clicked");
 
-  form.append("inDate", inDate.value);
-  form.append("expDate", expDate.value);
-  form.append("itemNo", itemNo.value);
-  form.append("batch", batch.value);
-  form.append("qty", qty.value);
-  form.append("sample", sample.value || 0);
-  form.append("box", box.value);
+  const params = new URLSearchParams({
+    inDate: document.getElementById("inDate").value,
+    expDate: document.getElementById("expDate").value,
+    itemNo: document.getElementById("itemNo").value,
+    batch: document.getElementById("batch").value,
+    qty: document.getElementById("qty").value,
+    sample: document.getElementById("sample").value || 0,
+    box: document.getElementById("box").value
+  });
 
-  try {
+  try{
 
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: form
+    const res = await fetch(API + "?" + params.toString(), {
+      method: "GET"
     });
 
     const text = await res.text();
 
-    msg.innerHTML = "✔ " + text;
+    document.getElementById("msg").innerText = "✔ " + text;
 
-    // ⭐ 清空
-    inDate.value = "";
-    expDate.value = "";
-    itemNo.value = "";
-    batch.value = "";
-    qty.value = "";
-    sample.value = "";
-    box.value = "";
+    // 清空
+    document.getElementById("inDate").value = "";
+    document.getElementById("expDate").value = "";
+    document.getElementById("itemNo").value = "";
+    document.getElementById("batch").value = "";
+    document.getElementById("qty").value = "";
+    document.getElementById("sample").value = "";
+    document.getElementById("box").value = "";
 
-  } catch(err){
-    msg.innerHTML = "❌ 連線失敗";
+  }catch(e){
+    console.log(e);
+    document.getElementById("msg").innerText = "❌ 連線失敗";
   }
 }
 
