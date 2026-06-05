@@ -1,96 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-body{
-  margin:0;
-  font-family:"Microsoft JhengHei";
-  background:#f2f2f2;
-}
-
-/* ⭐ 手機App卡片 */
-.container{
-  max-width:420px;
-  margin:auto;
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* 標題 */
-h2{
-  text-align:center;
-  font-size:22px;
-}
-
-/* ⭐ 手機超大輸入 */
-input{
-  width:100%;
-  padding:16px;
-  margin-top:10px;
-  font-size:18px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
-}
-
-/* 按鈕 */
-button{
-  width:100%;
-  padding:16px;
-  margin-top:15px;
-  font-size:18px;
-  background:#1976d2;
-  color:white;
-  border:none;
-  border-radius:10px;
-}
-
-/* 訊息 */
-#msg{
-  text-align:center;
-  margin-top:12px;
-  font-size:16px;
-  color:#2e7d32;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h2>📦 裸瓶入庫系統</h2>
-
-<input id="inDate" placeholder="進料日期 20260101">
-<input id="expDate" placeholder="保存期限 20261231">
-
-<input id="itemNo" placeholder="品號">
-<input id="batch" placeholder="批號">
-
-<input id="qty" type="number" placeholder="數量">
-<input id="sample" type="number" placeholder="取樣">
-
-<input id="box" placeholder="箱/板">
-
-<button onclick="send()">送出</button>
-
-<div id="msg"></div>
-
-</div>
-
 <script>
 
-const API = "https://script.google.com/macros/s/AKfycbzxkGoc5xGXykxtaF9OXEcbDjQA3Vt392IlZG3x01lqCm31d4i93jUsIPqfMIo61oI2/exec";
+const API = "https://script.google.com/macros/s/AKfycbz2MS6UHWGopid--YE2aCuqVtC4g_Z-9lLgFyfNCEhB4L7Bly70MwahfVB4dA6zSDCe/exec";
 
 async function send(){
 
-  console.log("clicked");
+  console.log("click ok");
 
   const params = new URLSearchParams({
     inDate: document.getElementById("inDate").value,
@@ -102,7 +16,7 @@ async function send(){
     box: document.getElementById("box").value
   });
 
-  try{
+  try {
 
     const res = await fetch(API + "?" + params.toString(), {
       method: "GET"
@@ -113,21 +27,14 @@ async function send(){
     document.getElementById("msg").innerText = "✔ " + text;
 
     // 清空
-    document.getElementById("inDate").value = "";
-    document.getElementById("expDate").value = "";
-    document.getElementById("itemNo").value = "";
-    document.getElementById("batch").value = "";
-    document.getElementById("qty").value = "";
-    document.getElementById("sample").value = "";
-    document.getElementById("box").value = "";
+    ["inDate","expDate","itemNo","batch","qty","sample","box"]
+    .forEach(id => document.getElementById(id).value = "");
 
-  }catch(e){
+  } catch (e) {
+
     console.log(e);
-    document.getElementById("msg").innerText = "❌ 連線失敗";
+    document.getElementById("msg").innerText = "❌ 連線失敗（GAS沒回應）";
   }
 }
 
 </script>
-
-</body>
-</html>
