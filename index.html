@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+  font-family:"Microsoft JhengHei";
+  background:#f5f5f5;
+  margin:0;
+  padding:20px;
+}
+
+/* ⭐ App卡片 */
+。container{
+  max-width:420px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 標題 */
+h2{
+  text-align:center;
+  font-size:22px;
+  margin-bottom:15px;
+}
+
+/* ⭐ 手機大輸入 */
+input{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  font-size:18px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+
+/* 按鈕 */
+button{
+  width:100%;
+  margin-top:15px;
+  padding:16px;
+  font-size:18px;
+  background:#1976d2;
+  color:white;
+  border:none;
+  border-radius:10px;
+}
+
+/* 訊息 */
+#msg{
+  text-align:center;
+  margin-top:10px;
+  font-size:16px;
+  color:#2e7d32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📦 裸瓶入庫系統</h2>
+
+<input id="inDate" placeholder="進料日期 20260101">
+<input id="expDate" placeholder="保存期限 20261231">
+
+<input id="itemNo" placeholder="品號">
+<input id="batch" placeholder="批號">
+
+<input id="qty" 輸入="number" placeholder="數量">
+<input id="sample" 輸入="number" placeholder="取樣">
+<input id="box" placeholder="箱/版">
+
+<button onclick="send()">送出</button>
+
+<div id="msg"></div>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwF9XiSPvdWRnqFLTuyIQys6b42izxEJtITQR_7GFaBJ4F61czIHQMx02vukleAVNw/exec";
+
+async function send(){
+
+  const data = {
+    inDate: inDate.value,
+    expDate: expDate.value,
+    itemNo: itemNo.value,
+    batch: batch.value,
+    qty: qty.value,
+    sample: sample.value || 0,
+    box: box.value
+  };
+
+  try {
+
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+
+    const text = await res。text();
+
+    msg.innerHTML = "✔ " + text;
+
+    // ⭐ 自動清空
+    inDate.value = "";
+    expDate.value = "";
+    itemNo.value = "";
+    batch.value = "";
+    qty.value = "";
+    sample.value = "";
+    box.value = "";
+
+  } catch(err){
+    msg.innerHTML = "❌ 連線失敗";
+  }
+}
+
+</script>
+
+</body>
+</html>
