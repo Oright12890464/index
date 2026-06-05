@@ -13,7 +13,7 @@ body{
 }
 
 /* ⭐ App卡片 */
-。container{
+.container{
   max-width:420px;
   margin:auto;
   background:white;
@@ -76,8 +76,8 @@ button{
 <input id="itemNo" placeholder="品號">
 <input id="batch" placeholder="批號">
 
-<input id="qty" 輸入="number" placeholder="數量">
-<input id="sample" 輸入="number" placeholder="取樣">
+<input id="qty" type="number" placeholder="數量">
+<input id="sample" type="number" placeholder="取樣">
 <input id="box" placeholder="箱/版">
 
 <button onclick="send()">送出</button>
@@ -88,32 +88,32 @@ button{
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzxkGoc5xGXykxtaF9OXEcbDjQA3Vt392IlZG3x01lqCm31d4i93jUsIPqfMIo61oI2/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwYEYorphN5H6q1XDIZ7MaIUT5SI6NoRnERJzyFNWxQCWIGrwe-eaddS1ZGj93udJXH/exec";
 
 async function send(){
 
-  const data = {
-    inDate: inDate.value,
-    expDate: expDate.value,
-    itemNo: itemNo.value,
-    batch: batch.value,
-    qty: qty.value,
-    sample: sample.value || 0,
-    box: box.value
-  };
+  const form = new URLSearchParams();
+
+  form.append("inDate", inDate.value);
+  form.append("expDate", expDate.value);
+  form.append("itemNo", itemNo.value);
+  form.append("batch", batch.value);
+  form.append("qty", qty.value);
+  form.append("sample", sample.value || 0);
+  form.append("box", box.value);
 
   try {
 
     const res = await fetch(API_URL, {
       method: "POST",
-      body: JSON.stringify(data)
+      body: form
     });
 
-    const text = await res。text();
+    const text = await res.text();
 
     msg.innerHTML = "✔ " + text;
 
-    // ⭐ 自動清空
+    // ⭐ 清空
     inDate.value = "";
     expDate.value = "";
     itemNo.value = "";
